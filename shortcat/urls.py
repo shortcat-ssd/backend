@@ -16,10 +16,14 @@ Including another URLconf
 """
 import os
 
+from django.conf import settings
+from django.conf.urls.static import static
+from django.shortcuts import render
 from django.contrib import admin
 from django.urls import path, include
 from drf_yasg import openapi, views
 from rest_framework import permissions, schemas
+from shorts.views import redirect_short
 
 schema_view = views.get_schema_view(
     openapi.Info(
@@ -46,4 +50,7 @@ urlpatterns = [
     path('api/v1/shorts/', include('shorts.urls')),
     path('api/v1/auth/', include('dj_rest_auth.urls')),
     path('api/v1/auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('<str:code>/', redirect_short),
 ]
+
+# handler404 = lambda r, _: render(r, 'static/404.svg', status=404, content_type='image/svg+xml')

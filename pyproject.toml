@@ -16,7 +16,8 @@ dependencies = [
     "dj-rest-auth (==7.0.1)",
     "django-allauth (==65.13.1)",
     "requests (==2.32.5)",
-    "drf-nested-routers (>=0.95.0,<0.96.0)"
+    "drf-nested-routers (>=0.95.0,<0.96.0)",
+    "whitenoise (>=6.11.0,<7.0.0)"
 ]
 
 
