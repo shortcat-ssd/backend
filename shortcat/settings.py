@@ -59,6 +59,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
+    "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%SZ",
+    "DATETIME_TIMEZONE": "UTC",
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
 }
 

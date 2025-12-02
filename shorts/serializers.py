@@ -1,3 +1,5 @@
+import zoneinfo
+
 from django.utils import timezone
 from rest_framework import serializers
 
@@ -5,6 +7,12 @@ from shorts.models import Short, ShortView
 
 
 class ShortSerializer(serializers.ModelSerializer):
+    expired_at = serializers.DateTimeField(
+        required=False,
+        allow_null=True,
+        default_timezone=zoneinfo.ZoneInfo("Europe/Rome"),
+    )
+
     class Meta:
         model = Short
         fields = (
@@ -15,8 +23,9 @@ class ShortSerializer(serializers.ModelSerializer):
             "private",
             "expired_at",
             "created_at",
+            "updated_at",
         )
-        read_only_fields = ("user", "code", "created_at")
+        read_only_fields = ("user", "code")
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -44,4 +53,3 @@ class ShortViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShortView
         fields = ("created_at",)
-        read_only_fields = ("created_at",)
