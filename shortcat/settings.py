@@ -99,8 +99,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shortcat.wsgi.application'
 
+ACCOUNT_LOGIN_METHODS = ["username", "email"]
 ACCOUNT_SIGNUP_FIELDS = [
-
+    "username*",
+    "email*",
+    "password1*",
+    "password2*",
 ]
 
 # Database
