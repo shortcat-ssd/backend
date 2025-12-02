@@ -29,10 +29,14 @@ class Short(models.Model):
 
     private = models.BooleanField(default=False)
 
-    expire_at = models.DateTimeField(null=True, blank=True)
+    expired_at = models.DateTimeField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    @staticmethod
+    def get_readonly_fields():
+        return ["id", "code", "created_at", "updated_at"]
 
     def __str__(self):
         return f"{self.code} -> {self.target}"
