@@ -1,11 +1,13 @@
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
+from shorts.permissions import NotPrivate
 
 from shorts.models import Short, ShortStats
 from shorts.serializers import ShortSerializer, ShortStatsSerializer
 
 class ShortViewSet(viewsets.ModelViewSet):
+    permission_classes = [NotPrivate]
     queryset = Short.objects.all()
     serializer_class = ShortSerializer
     lookup_field = "code"
