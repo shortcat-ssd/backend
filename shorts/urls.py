@@ -1,11 +1,9 @@
-from rest_framework_nested.routers import SimpleRouter, NestedSimpleRouter
+from rest_framework.urls import path
 
-from shorts.views import ShortViewSet, ShortStatsViewSet
+from shorts.views import ShortList, ShortDetails, ShortViewsList
 
-router = SimpleRouter()
-router.register(r'', ShortViewSet)
-
-nested_router = NestedSimpleRouter(router, r'', lookup='short')
-nested_router.register(r'stats', ShortStatsViewSet, basename='short-stats')
-
-urlpatterns = router.urls + nested_router.urls
+urlpatterns = [
+    path('', ShortList.as_view(), name='short-list'),
+    path('<str:code>/', ShortDetails.as_view(), name='short-detail'),
+    path('<str:code>/views/', ShortViewsList.as_view(), name='short-stats-detail'),
+]
