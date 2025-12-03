@@ -1,9 +1,9 @@
 from django.urls import path
 
-from shorts.views import ShortList, ShortDetails, ShortViewsList
+from shorts.views import ShortsListView, ShortDetailsView, ShortViewsView
 
 urlpatterns = [
-    path("", ShortList.as_view(), name="short-list"),
-    path("<str:code>/", ShortDetails.as_view(), name="short-detail"),
-    path("<str:code>/views/", ShortViewsList.as_view(), name="short-views"),
+    path("", ShortsListView.as_view()),
+    path("<str:code>/", ShortDetailsView.as_view()),
+    path("<str:code>/views/", ShortViewsView.as_view()),
 ]

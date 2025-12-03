@@ -9,7 +9,11 @@ from shorts.models import Short, ShortView
 from shorts.serializers import ShortSerializer, ShortViewsSerializer
 
 
-class ShortList(generics.ListCreateAPIView):
+class ShortsListView(generics.ListCreateAPIView):
+    """
+    List all shorts for the authenticated user or create a new short.
+    """
+
     serializer_class = ShortSerializer
     permission_classes = [IsAuthenticated]
 
@@ -20,7 +24,11 @@ class ShortList(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class ShortDetails(generics.RetrieveUpdateDestroyAPIView):
+class ShortDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, or delete a short by its code.
+    """
+
     serializer_class = ShortSerializer
     permission_classes = [ReadOnlyIfPublic | (IsAuthenticated & IsOwner)]
     lookup_field = "code"
@@ -38,7 +46,11 @@ class ShortDetails(generics.RetrieveUpdateDestroyAPIView):
         return Short.objects.filter(code=code)
 
 
-class ShortViewsList(generics.ListAPIView):
+class ShortViewsView(generics.ListAPIView):
+    """
+    List all views for a specific short by its code.
+    """
+
     serializer_class = ShortViewsSerializer
     permission_classes = [IsAuthenticated & IsOwner]
     lookup_field = "code"
