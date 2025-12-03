@@ -43,6 +43,7 @@ class Short(models.Model):
             return False
         return self.expired_at <= timezone.now()
 
+
 class ShortView(models.Model):
     short = models.ForeignKey(
         Short,

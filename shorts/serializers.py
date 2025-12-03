@@ -16,7 +16,6 @@ class ShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Short
         fields = (
-            "user",
             "code",
             "target",
             "label",
@@ -25,31 +24,23 @@ class ShortSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         )
+        # immutable fields
         read_only_fields = ("user", "code")
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        request = self.context.get("request")
-        if request:
-            user = request.user
-            is_owner = user.is_authenticated and instance.user == user
-            is_staff = user.is_authenticated and user.is_staff
-            if not (is_owner or is_staff):
-                data.pop("user", None)
-        return data
-
+    # automatic validation for expired_at field
     def validate_expired_at(self, value):
         if value and value <= timezone.now():
-            raise serializers.ValidationError("Expiration date must be in the future.")
+            raise serializers.ValidationError("expiration date must be in the future")
         return value
 
+    # automatic validation for target field
     def validate_target(self, value):
         if not value:
-            raise serializers.ValidationError("Target URL is required.")
+            raise serializers.ValidationError("target URL is required")
         return value
 
 
-class ShortViewSerializer(serializers.ModelSerializer):
+class ShortViewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShortView
         fields = ("created_at",)

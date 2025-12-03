@@ -1,57 +1,53 @@
-from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404
-from django.utils import timezone
+from rest_framework.exceptions import NotAuthenticated, PermissionDenied
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
+from rest_framework.permissions import IsAuthenticated
+from shorts.permissions import IsOwner, ReadOnlyIfPublic
+from shorts.exceptions import NotFound
 
 from shorts.models import Short, ShortView
-from shorts.serializers import ShortSerializer, ShortViewSerializer
-from shorts.permissions import IsOwnerOrReadOnly, IsPublicOrOwner
+from shorts.serializers import ShortSerializer, ShortViewsSerializer
+
 
 class ShortList(generics.ListCreateAPIView):
     serializer_class = ShortSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return Short.objects.all()
         return Short.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
 class ShortDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ShortSerializer
+    permission_classes = [ReadOnlyIfPublic | (IsAuthenticated & IsOwner)]
     lookup_field = "code"
 
-    def get_permissions(self):
-        if self.request.method in SAFE_METHODS:
-            return [IsPublicOrOwner()]
-        return [IsAuthenticated(), IsOwnerOrReadOnly()]
+    def get_object(self):
+        try:
+            return super().get_object()
+        except (NotAuthenticated, PermissionDenied, Http404):
+            # Raise 404 to prevent leakage.
+            # We catch Http404 too, to override error messages
+            raise NotFound
 
     def get_queryset(self):
-        return Short.objects.all()
+        code = self.kwargs.get("code")
+        return Short.objects.filter(code=code)
+
 
 class ShortViewsList(generics.ListAPIView):
-    serializer_class = ShortViewSerializer
-    permission_classes = [IsAuthenticated]
+    serializer_class = ShortViewsSerializer
+    permission_classes = [IsAuthenticated & IsOwner]
+    lookup_field = "code"
 
     def get_queryset(self):
-        user = self.request.user
         code = self.kwargs.get("code")
-        queryset = Short.objects.filter(code=code)
-        if not user.is_staff:
-            queryset = queryset.filter(user=user)
-        short = get_object_or_404(queryset)
+        try:
+            short = Short.objects.get(code=code)
+            self.check_object_permissions(self.request, short)
+        except (NotAuthenticated, PermissionDenied, Short.DoesNotExist):
+            raise NotFound
         return ShortView.objects.filter(short=short)
-
-
-def redirect_short(request, code):
-    short = get_object_or_404(Short, code=code)
-    if short.is_expired:
-        raise Http404
-    if short.private and (not request.user.is_authenticated or request.user != short.user):
-        raise Http404
-    ShortView.objects.create(short=short)
-    return redirect(short.target)

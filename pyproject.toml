@@ -17,7 +17,9 @@ dependencies = [
     "django-allauth (==65.2.0)",
     "requests (==2.32.5)",
     "drf-nested-routers (>=0.95.0,<0.96.0)",
-    "whitenoise (>=6.11.0,<7.0.0)"
+    "whitenoise (>=6.11.0,<7.0.0)",
+    "ruff (>=0.14.7,<0.15.0)",
+    "black (>=25.11.0,<26.0.0)"
 ]
 
 
