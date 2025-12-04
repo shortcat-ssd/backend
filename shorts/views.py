@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from shorts.permissions import IsOwner
 from shorts.exceptions import NotFound
-from shorts.models import Short, ShortView
-from shorts.serializers import ShortSerializer, ShortViewsSerializer
+from shorts.models import Short, ShortClick
+from shorts.serializers import ShortSerializer, ShortClicksSerializer
 
 
 class ShortsListView(generics.ListCreateAPIView):
@@ -46,12 +46,12 @@ class ShortDetailsView(generics.RetrieveUpdateDestroyAPIView):
         return Short.objects.filter(code=code)
 
 
-class ShortViewsView(generics.ListAPIView):
+class ShortClicksView(generics.ListAPIView):
     """
-    List all views for a specific short by its code.
+    List all clicks for a specific short by its code.
     """
 
-    serializer_class = ShortViewsSerializer
+    serializer_class = ShortClicksSerializer
     permission_classes = [IsAuthenticated & IsOwner]
     lookup_field = "code"
 
@@ -62,4 +62,4 @@ class ShortViewsView(generics.ListAPIView):
             self.check_object_permissions(self.request, short)
         except (NotAuthenticated, PermissionDenied, Short.DoesNotExist):
             raise NotFound
-        return ShortView.objects.filter(short=short)
+        return ShortClick.objects.filter(short=short)

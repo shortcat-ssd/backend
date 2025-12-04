@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404
-from shorts.models import Short, ShortView
+from shorts.models import Short, ShortClick
 
 
 def redirect_short(request, code):
@@ -11,5 +11,5 @@ def redirect_short(request, code):
         not request.user.is_authenticated or request.user != short.user
     ):
         raise Http404
-    ShortView.objects.create(short=short)
+    ShortClick.objects.create(short=short)
     return redirect(short.target)

@@ -3,7 +3,7 @@ import zoneinfo
 from django.utils import timezone
 from rest_framework import serializers
 
-from shorts.models import Short, ShortView
+from shorts.models import Short, ShortClick
 
 
 class ShortSerializer(serializers.ModelSerializer):
@@ -40,7 +40,7 @@ class ShortSerializer(serializers.ModelSerializer):
         return value
 
 
-class ShortViewsSerializer(serializers.ModelSerializer):
+class ShortClicksSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ShortView
+        model = ShortClick
         fields = ("created_at",)

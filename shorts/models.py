@@ -49,11 +49,11 @@ class Short(models.Model):
         return self.expired_at <= timezone.now()
 
 
-class ShortView(models.Model):
+class ShortClick(models.Model):
     short = models.ForeignKey(
         Short,
         on_delete=models.CASCADE,
-        related_name="views",
+        related_name="clicks",
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
