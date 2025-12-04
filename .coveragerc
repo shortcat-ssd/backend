@@ -1,0 +1,18 @@
+[run]
+branch = True
+
+omit =
+    shorts/migrations/*
+    shorts/tests.py
+    shorts/admin.py
+    shorts/apps.py
+
+[report]
+include =
+    shorts/models.py
+    shorts/views.py
+    shorts/serializers.py
+    shorts/permissions.py
+    shorts/urls.py
+
+show_missing = True
