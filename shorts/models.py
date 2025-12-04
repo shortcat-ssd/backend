@@ -3,7 +3,16 @@ from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils import timezone
 
-from shorts.util import generate_code
+import secrets
+
+CODE_LENGTH = 8
+
+
+def generate_code():
+    while True:
+        code = secrets.token_urlsafe(CODE_LENGTH)[:CODE_LENGTH]
+        if not Short.objects.filter(code=code).exists():
+            return code
 
 
 class Short(models.Model):
