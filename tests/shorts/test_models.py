@@ -1,16 +1,8 @@
 from datetime import timedelta
 
-import pytest
-from unittest.mock import patch
 from django.utils import timezone
 
 from shorts.models import generate_code, CODE_LENGTH
-
-
-@pytest.fixture
-def mock_token_urlsafe():
-    with patch("shorts.models.secrets.token_urlsafe") as mock:
-        yield mock
 
 
 def test_generate_code_returns_value_when_no_collision(mock_token_urlsafe):

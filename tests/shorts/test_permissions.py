@@ -1,19 +1,3 @@
-import pytest
-from rest_framework.test import APIRequestFactory
-
-from shorts.permissions import IsOwner
-
-
-@pytest.fixture
-def factory():
-    return APIRequestFactory()
-
-
-@pytest.fixture
-def owner_permission():
-    return IsOwner()
-
-
 def test_superuser_has_permission(
     factory, owner_permission, factory_user, factory_short
 ):
