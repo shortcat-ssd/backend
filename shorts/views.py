@@ -2,9 +2,9 @@ from django.http import Http404
 from rest_framework.exceptions import NotAuthenticated, PermissionDenied
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from shorts.permissions import IsOwner, ReadOnlyIfPublic
-from shorts.exceptions import NotFound
 
+from shorts.permissions import IsOwner
+from shorts.exceptions import NotFound
 from shorts.models import Short, ShortView
 from shorts.serializers import ShortSerializer, ShortViewsSerializer
 
@@ -30,7 +30,7 @@ class ShortDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """
 
     serializer_class = ShortSerializer
-    permission_classes = [ReadOnlyIfPublic | (IsAuthenticated & IsOwner)]
+    permission_classes = [IsAuthenticated & IsOwner]
     lookup_field = "code"
 
     def get_object(self):
