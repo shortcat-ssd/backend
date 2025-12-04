@@ -1,13 +1,9 @@
-import secrets
-
 from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils import timezone
 
-
-def generate_code(length=8):
-    return secrets.token_urlsafe(length)[:length]
+from shorts.util import generate_code
 
 
 class Short(models.Model):
