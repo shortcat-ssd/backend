@@ -52,7 +52,7 @@ def test_shorts_create_creates_short_for_authenticated_user(auth_client):
 def test_short_detail_returns_404_for_non_owner(
     auth_client, factory_user, factory_short
 ):
-    api_client, _other_user = auth_client
+    api_client, _ = auth_client
     owner = factory_user()
     short = factory_short(user=owner)
 
@@ -79,7 +79,7 @@ def test_short_clicks_returns_clicks_for_owner(
 def test_short_clicks_returns_404_for_non_owner(
     auth_client, factory_user, factory_short, factory_click
 ):
-    api_client, _other_user = auth_client
+    api_client, _ = auth_client
     owner = factory_user()
     short = factory_short(user=owner)
 
