@@ -9,6 +9,7 @@ omit =
 
 [report]
 include =
+    shorts/util.py
     shorts/models.py
     shorts/views.py
     shorts/serializers.py
